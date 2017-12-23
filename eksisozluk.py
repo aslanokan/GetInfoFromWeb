@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from lxml import html
 import requests
 import webbrowser
@@ -72,7 +74,9 @@ def searchAndPrintTopics():
 
 
 searchAndPrintTopics()
-nextTopic = raw_input(": ")
+nextTopic = raw_input(": ").decode('utf-8')
+print nextTopic
+
 searchForWriter(siteAdres(nextTopic))
 
 print "\n\n\n"
