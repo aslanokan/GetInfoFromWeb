@@ -72,13 +72,17 @@ def searchAndPrintTopics():
     for k in reversed(lis):
         print str(k[0]) + (4-len(str(k[0])))*" " + k[1]
 
+def readEntries(link, number):
+    searchForWriter(siteAdres(link)+ "?p=" + str(number))
+    print "\n\n\n"
+    for i in lis2:
+        print i[0], i[1], "\n" ,searchForEntry(i[2])
 
 searchAndPrintTopics()
-nextTopic = raw_input(": ").decode('utf-8')
-print nextTopic
 
-searchForWriter(siteAdres(nextTopic))
-
-print "\n\n\n"
-for i in lis2:
-    print i[0], i[1], "\n" ,searchForEntry(i[2])
+nextTopic = raw_input("Topic: ").decode('utf-8')
+pageNumber = int(raw_input("Page Number: "))
+while(nextTopic != ""):
+    readEntries(nextTopic, pageNumber)
+    nextTopic = raw_input("Topic: ").decode('utf-8')
+    pageNumber = int(raw_input("Page Number: "))
