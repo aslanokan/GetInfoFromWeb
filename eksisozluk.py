@@ -42,7 +42,6 @@ def searchForEntry(link):
 
     text = tree.xpath("//div[@class='content']/text() | //div[@class='content']/*/text()")
     for i in text:
-        print i
         entry += " " + i
 
     print entry[6:]
