@@ -73,10 +73,13 @@ def searchAndPrintTopics():
         print str(k[0]) + (4-len(str(k[0])))*" " + k[1]
 
 def readEntries(link, number):
-    searchForWriter(siteAdres(link)+ "?p=" + str(number))
-    print "\n\n\n"
-    for i in lis2:
-        print i[0], i[1], "\n" ,searchForEntry(i[2])
+    if((siteAdres(link)) != None):
+        searchForWriter(siteAdres(link)+ "?p=" + str(number))
+        print "\n\n\n"
+        for i in lis2:
+            print i[0], i[1], "\n" ,searchForEntry(i[2])
+    else:
+        print "Try again"
 
 searchAndPrintTopics()
 
