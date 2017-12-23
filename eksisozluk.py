@@ -44,7 +44,7 @@ def searchForEntry(link):
     for i in text:
         entry += " " + i
 
-    print entry[6:]
+    return entry[6:]
 
 
 def siteAdres(userInput):
