@@ -49,10 +49,21 @@ def searchForEntry(link):
     return entry[6:]
 
 
-def siteAdres(userInput):
-    for i in lis:
-        if i[1] == userInput+" ":
-            return "https://eksisozluk.com" + i[2][:-10]
+def siteAdres(link):
+    page = requests.get(link)
+    tree = html.fromstring(page.content)
+
+    text1 = tree.xpath("//div[@id='topic']/div/text()")
+    text2 = tree.xpath("//div[@id='topic']/p/text()")
+
+    if len(text1) >= 3:
+        if text1[2][10:-9] == "böyle bir şey yok".decode('utf-8'):
+            return False
+    if text2 != []:
+        if text2[0][:15] == "bu mümkün değil".decode('utf-8'):
+            return False
+    else:
+        return link
 
 def sortList():
     for q in range(len(lis)):
@@ -72,21 +83,48 @@ def searchAndPrintTopics():
     for k in reversed(lis):
         print str(k[0]) + (4-len(str(k[0])))*" " + k[1]
 
-def readEntries(link, number):
-    if((siteAdres(link)) != None):
-        searchForWriter(siteAdres(link)+ "?p=" + str(number))
+def getTopicLink(topic):
+    link = link = "https://eksisozluk.com/" + topic
+    page = requests.get(link)
+    tree = html.fromstring(page.content)
+
+    text = tree.xpath("//div[@id='topic']/h1/a/@href")
+    return "https://eksisozluk.com" + text[0]
+
+def readEntries(link, pageNumber):
+    link = getTopicLink(topic) + "?p=" + str(pageNumber)
+    if((siteAdres(link)) != False):
+        searchForWriter(link)
         print "\n\n\n"
         for i in lis2:
             print i[0], i[1], "\n" ,searchForEntry(i[2])
     else:
         print "Try again"
 
+def readAllEntries(topic, summary=False):
+    page = 1
+    link = getTopicLink(topic)
+    while((siteAdres(link)) != False):
+        searchForWriter(link)
+        print "\n\n\n Page " + str(page) + ":"
+        for i in lis2:
+            if summary == True:
+                print i[0], i[1], "\n" ,searchForEntry(i[2])[:30], "\n"
+            else:
+                print i[0], i[1], "\n" ,searchForEntry(i[2]), "\n"
+        page += 1
+        link = getTopicLink(topic) + "?p=" + str(page)
+        del lis2[:]
+    print "Done!!"
+
+
 searchAndPrintTopics()
 
 nextTopic = raw_input("Topic: ").decode('utf-8')
 pageNumber = int(raw_input("Page Number: "))
 while(True):
-    readEntries(nextTopic, pageNumber)
+    #readEntries(nextTopic, pageNumber)
+    readAllEntries(nextTopic, True)
     nextTopic = raw_input("Topic: ").decode('utf-8')
     if nextTopic == "":
         break
