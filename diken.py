@@ -16,9 +16,7 @@ def getMainNews():
     mainNews = tree.xpath("//div[@class='slide-excerpt-border ']/h2/a/text()")
     mainNewsLinks = tree.xpath("//div[@class='slide-excerpt-border ']/h2/a/@href")
 
-    return mainNews
-
-print getMainNews()
+    return (mainNews, mainNewsLinks)
 
 def getNewsInfo(news):
     link = news
@@ -30,8 +28,13 @@ def getNewsInfo(news):
     tree = html.fromstring(page.content)
     header = tree.xpath("//header[@class='entry-header']/h1/text()")
     enryTime = tree.xpath("//time[@class='entry-time']/text()")
-    newsInfo = tree.xpath("//div[@class='entry-content']/p/text()")
+    newsInfo = tree.xpath("//main[@class='content']/article/div[@class='entry-content']/p/text() | //main[@class='content']/article/div[@class='entry-content']/p/*/text()")
 
-    return newsInfo
+    return (header, enryTime, newsInfo)
 
-print getMainNews()
+for i in getMainNews()[1]:
+    print getNewsInfo(i)[0][0]
+    print ""
+    for q in getNewsInfo(i)[2]:
+        print q,
+    print "\n\n\n\n\n"
