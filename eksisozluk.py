@@ -85,7 +85,9 @@ searchAndPrintTopics()
 
 nextTopic = raw_input("Topic: ").decode('utf-8')
 pageNumber = int(raw_input("Page Number: "))
-while(nextTopic != ""):
+while(True):
     readEntries(nextTopic, pageNumber)
     nextTopic = raw_input("Topic: ").decode('utf-8')
+    if nextTopic == "":
+        break
     pageNumber = int(raw_input("Page Number: "))
