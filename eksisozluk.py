@@ -116,7 +116,7 @@ def readAllEntries(topic, summary=False):
         print "\n\n\n Page " + str(page) + ":"
         for i in lis2:
             if summary == True:
-                print i[0], i[1], "\n" ,searchForEntry(i[2])[:30], "\n"
+                print i[0], i[1], "\n" ,searchForEntry(i[2])[:50], "\n"
             else:
                 print i[0], i[1], "\n" ,searchForEntry(i[2]), "\n"
         page += 1
@@ -136,6 +136,9 @@ while(True):
     elif nextTopic == "l":
         searchAndPrintTopics()
     else:
-        readAllEntries(nextTopic)
+        if nextTopic[:3] == "-s ":
+            readAllEntries(nextTopic[3:], True)
+        else:
+            readAllEntries(nextTopic)
 
     #pageNumber = int(raw_input("Page Number: "))
