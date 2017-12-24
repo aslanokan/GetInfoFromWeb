@@ -11,7 +11,11 @@ lis2 = []
 topics = []
 
 def searchForTopics(link):
-    page = requests.get(link)
+    try:
+        page = requests.get(link)
+    except requests.exceptions.ConnectionError, e:
+        print e
+
     tree = html.fromstring(page.content)
 
 
@@ -83,6 +87,9 @@ def searchAndPrintTopics():
     for k in reversed(lis):
         print str(k[0]) + (4-len(str(k[0])))*" " + k[1]
 
+    del lis[:]
+    del topics[:]
+
 def getTopicLink(topic):
     link = link = "https://eksisozluk.com/" + topic
     page = requests.get(link)
@@ -120,12 +127,15 @@ def readAllEntries(topic, summary=False):
 
 searchAndPrintTopics()
 
-nextTopic = raw_input("Topic: ").decode('utf-8')
-pageNumber = int(raw_input("Page Number: "))
+#pageNumber = int(raw_input("Page Number: "))
 while(True):
     #readEntries(nextTopic, pageNumber)
-    readAllEntries(nextTopic, True)
     nextTopic = raw_input("Topic: ").decode('utf-8')
     if nextTopic == "":
         break
-    pageNumber = int(raw_input("Page Number: "))
+    elif nextTopic == "l":
+        searchAndPrintTopics()
+    else:
+        readAllEntries(nextTopic)
+
+    #pageNumber = int(raw_input("Page Number: "))
