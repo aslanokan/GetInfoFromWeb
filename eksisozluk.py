@@ -96,7 +96,7 @@ def getTopicLink(topic):
     tree = html.fromstring(page.content)
 
     text = tree.xpath("//div[@id='topic']/h1/a/@href")
-    return "https://eksisozluk.com" + text[0]
+    return "https://eksisozluk.com" + text[0] + "?a=nice"
 
 def readEntries(link, pageNumber):
     link = getTopicLink(topic) + "?p=" + str(pageNumber)
