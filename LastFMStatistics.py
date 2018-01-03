@@ -4,9 +4,8 @@ from lxml import html
 import requests
 
 artists = {}
-songs = {}
 
-def getSongs(link):
+def getInfo(link):
     try:
         page = requests.get(link)
     except requests.exceptions.ConnectionError, e:
@@ -14,28 +13,58 @@ def getSongs(link):
 
     tree = html.fromstring(page.content)
 
-    artistName = tree.xpath("//td[@class = 'chartlist-name']/span/span/a/text()")
-    songName = tree.xpath("//td[@class = 'chartlist-name']/span/a/text()")
-    for i in range(len(artistName)):
-        artist = artistName[i]
-        song = songName[i]
+    artistNames = tree.xpath("//td[@class = 'chartlist-name']/span/span/a/text()")
+    songNames = tree.xpath("//td[@class = 'chartlist-name']/span/a/text()")
+
+    getAllSongs(artistNames, songNames)
+
+def getLink(userName, pageNumber=1):
+    link ="https://www.last.fm/user/" + userName + "/library"
+    if pageNumber > 1:
+        link += "?page=" + str(pageNumber)
+    return link
+
+def getAllSongs(artistNames, songNames):
+    for i in range(len(artistNames)):
+        artist = artistNames[i]
+        song = songNames[i]
         if artist not in artists:
-            artists[artist] = {"Total": 1}
-            artists[artist][song] = 1
+            artists[artist] = {song: 1}
         else:
             if song not in artists[artist]:
                 artists[artist][song] = 1
             else:
                 artists[artist][song] += 1
-            artists[artist]["Total"] += 1
 
-getSongs("https://www.last.fm/user/Filojiston/library")
-for i in range(2, 10):
-    getSongs("https://www.last.fm/user/Filojiston/library" + "?page=" + str(i))
+def listArtists(artists):
+    for i in artists:
+        print i
 
-print "\n\n\n"
-for i in artists:
-    print i, "(Total:", artists[i]["Total"], ")", ":"
-    for q in artists[i]:
-        if q != "Total":
-            print "\t", artists[i][q], "=>", q
+def listArtistsWithSongs(artists):
+    for i in artists:
+        print i, ":"
+        songs = enumDictionary(artists[i])
+        for q in range(len(songs)):
+            print "  " + str(q+1) + "-> " + str(songs[q][0]) + "-" + songs[q][1]
+
+
+#Olmadı
+def enumDictionary(dict):
+    enumLis = []
+    for i in dict:
+        enumLis.append([dict[i], i])
+
+    for i in range(len(enumLis)):
+        for q in range(i):
+            if enumLis[i-q][0] > enumLis[i-q-1][0]:
+                temp = enumLis[i-q-1]
+                enumLis[i-q-1] = enumLis[i-q]
+                enumLis[i-q] = temp
+    return enumLis
+
+
+for i in range(1, 5):
+    getInfo(getLink("Filojiston", i))
+
+listArtistsWithSongs(artists)
+print len(artists), "different artists"
