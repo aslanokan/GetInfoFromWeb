@@ -69,7 +69,7 @@ def getNumberOfSongs(artists):
             numOfDiffSongs += 1
     return (numOfSongs, numOfDiffSongs)
 
-for i in range(1, 50):
+for i in range(1, 475):
     getInfo(getLink("Filojiston", i))
 
 listArtistsWithSongs(artists)
