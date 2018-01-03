@@ -47,8 +47,6 @@ def listArtistsWithSongs(artists):
         for q in range(len(songs)):
             print "  " + str(q+1) + "-> " + str(songs[q][0]) + "-" + songs[q][1]
 
-
-#Olmadı
 def enumDictionary(dict):
     enumLis = []
     for i in dict:
@@ -62,9 +60,19 @@ def enumDictionary(dict):
                 enumLis[i-q] = temp
     return enumLis
 
+def getNumberOfSongs(artists):
+    numOfSongs = 0
+    numOfDiffSongs = 0
+    for i in artists:
+        for q in artists[i]:
+            numOfSongs += artists[i][q]
+            numOfDiffSongs += 1
+    return (numOfSongs, numOfDiffSongs)
 
-for i in range(1, 5):
+for i in range(1, 50):
     getInfo(getLink("Filojiston", i))
 
 listArtistsWithSongs(artists)
 print len(artists), "different artists"
+print getNumberOfSongs(artists)[0], "songs"
+print getNumberOfSongs(artists)[1], "different songs"
