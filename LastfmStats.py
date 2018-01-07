@@ -55,14 +55,15 @@ def getLink(userName, pageNumber=1):
         link += "?page=" + str(pageNumber)
     return link
 
-user = "Filojiston"
-
+##############################################################
+user = raw_input("Username: ")
 info = []
 for i in range(1, 2):
     info += getInfo(getLink(user, i))
 
 songs = songInfo(info) #dictionary
 artists = artistInfo(info) #dictionary
+##############################################################
 
 def printAllInfo():
     for i in artists:
@@ -85,8 +86,6 @@ def searchForSong(x):
         dates = song[1]
         return bandName, dates
 
-printAllInfo()
-
 def search(searchInput):
     while(searchInput != ""):
         if searchInput[:3] == "-a ":
@@ -102,13 +101,17 @@ def search(searchInput):
                 print searchForArtist(searchInput[3:])
         elif searchInput[:3] == "-s ":
             print searchForSong(searchInput[3:])
+        elif searchInput[:6] == "--list":
+            printAllInfo()
         else:
-            print "Please use -a [artist] or -s [song] tag at the beginning of search query."
+            print "Please use a tag at the beginning of search query."
         searchInput = raw_input(": ")
 
-
-search(raw_input("Use -a tag to search artist \
-                    \nUse -s tag to search song \
-                    \nUse -ss tag with -a to search for spesific song of the artist \
+howToSearch = "Use -a tag to search artist \n\t-a ARTISTSNAME\
+                    \nUse -s tag to search song \n\t-s SONGNAME\
+                    \nUse -ss tag with -a to search for spesific song of the artist \n\t-a ARTISTNAME -ss SONGNAME\
+                    \nWrite --list to list all information\
                     \nLeave the space blank to quit program \
-                    \n: "))
+                    \n"
+
+search(raw_input(howToSearch + ": "))
