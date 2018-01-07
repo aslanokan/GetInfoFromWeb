@@ -55,7 +55,7 @@ def getLink(userName, pageNumber=1):
         link += "?page=" + str(pageNumber)
     return link
 
-user = "SilencedFear"
+user = "Filojiston"
 
 info = []
 for i in range(1, 2):
@@ -87,5 +87,24 @@ def searchForSong(x):
 
 printAllInfo()
 
-while(True):
-    print searchForSong(raw_input(": "))
+def search(searchInput):
+    while(searchInput != ""):
+        if searchInput[:3] == "-a ":
+            Inputlist = searchInput.split()
+            if "-ss" in Inputlist:
+                indexOfSS = Inputlist.index("-ss")
+                lengthUntilSS = 0
+                for i in range(indexOfSS+1):
+                    lengthUntilSS += len(Inputlist[i])
+                    lengthUntilSS += 1
+                print searchForSong(searchInput[lengthUntilSS:])[1]
+            else:
+                print searchForArtist(searchInput[3:])
+        elif searchInput[:3] == "-s ":
+            print searchForSong(searchInput[3:])
+        else:
+            print "Please use -a [artist] or -s [song] tag at the beginning of search query."
+        searchInput = raw_input(": ")
+
+
+search(raw_input(": "))
