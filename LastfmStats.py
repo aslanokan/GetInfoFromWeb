@@ -91,7 +91,7 @@ def search(searchInput):
     while(searchInput != ""):
         if searchInput[:3] == "-a ":
             Inputlist = searchInput.split()
-            if "-ss" in Inputlist:
+            if "-ss" in Inputlist and searchForArtist(searchInput[3:]) != None:
                 indexOfSS = Inputlist.index("-ss")
                 lengthUntilSS = 0
                 for i in range(indexOfSS+1):
@@ -107,4 +107,8 @@ def search(searchInput):
         searchInput = raw_input(": ")
 
 
-search(raw_input(": "))
+search(raw_input("Use -a tag to search artist \
+                    \nUse -s tag to search song \
+                    \nUse -ss tag with -a to search for spesific song of the artist \
+                    \nLeave the space blank to quit program \
+                    \n: "))
