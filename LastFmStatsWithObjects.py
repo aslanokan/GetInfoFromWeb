@@ -9,8 +9,11 @@ class UserListerner():
         self.songs = {}
         self.artists = {}
         self.userName = userName
+        self.startPage = 1
+        self.stopPage = 2
 
-        for i in range(1, 10):
+
+        for i in range(self.startPage, self.stopPage):
             self.getInformation(self.getLink(i))
 
         self.songInfo(self.information) #dictionary
@@ -61,12 +64,28 @@ class UserListerner():
                 else:
                     self.artists[artist][song].append(date)
 
-filojiston = UserListerner("Filojiston")
+    def searchForArtist(x):
+        if x in self.artists:
+            songsOfX = self.artists[x]
+            return songsOfX
 
-for i in filojiston.artists:
-    print i
-    for q in filojiston.artists[i]:
-        print "\t", q
-        for k in filojiston.artists[i][q]:
-            print "\t\t", k
-    print
+    def searchForSong(x):
+        if x in self.songs:
+            song = self.songs[x]
+            bandName = song[0]
+            dates = song[1]
+            return bandName, dates
+
+Okan = UserListerner("Filojiston")
+Lacin = UserListerner("LAcin98")
+
+def listInfo(user):
+    for i in user.artists:
+        print i
+        for q in user.artists[i]:
+            print "\t", q
+            for k in user.artists[i][q]:
+                print "\t\t", k
+        print
+
+listInfo(Lacin)
