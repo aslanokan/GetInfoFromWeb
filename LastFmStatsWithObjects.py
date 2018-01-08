@@ -10,7 +10,7 @@ class UserListerner():
         self.artists = {}
         self.userName = userName
         self.startPage = 1
-        self.stopPage = 3
+        self.stopPage = 480
 
         for i in range(self.startPage, self.stopPage):
             self.getInformation(self.getLink(i))
@@ -82,7 +82,6 @@ class UserListerner():
             while len(topSongs) <= numOfListening:
                 topSongs.append([len(topSongs)])
             topSongs[numOfListening].append(i)
-        return topSongs[-number:]
 
         index = 0
         length = len(topSongs)
@@ -91,6 +90,8 @@ class UserListerner():
                 del topSongs[index]
                 index -= 1
             index += 1
+
+        return topSongs[-number:]
 
     def topArtist(self, number):
         topArtists = []
@@ -122,5 +123,11 @@ class UserListerner():
             print
 
 Okan = UserListerner("Filojiston")
+Lacin = UserListerner("Lacin98")
+Serkan = UserListerner("osteosit")
 
-print Okan.topSongs(int(raw_input(": ")))
+while True:
+    for i in Okan.topSongs(int(raw_input(": "))):
+        print i[0]
+        for q in range(1, len(i)):
+            print "\t", i[q]
