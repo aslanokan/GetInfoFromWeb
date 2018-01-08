@@ -10,8 +10,7 @@ class UserListerner():
         self.artists = {}
         self.userName = userName
         self.startPage = 1
-        self.stopPage = 2
-
+        self.stopPage = 3
 
         for i in range(self.startPage, self.stopPage):
             self.getInformation(self.getLink(i))
@@ -64,28 +63,64 @@ class UserListerner():
                 else:
                     self.artists[artist][song].append(date)
 
-    def searchForArtist(x):
+    def searchForArtist(self, x):
         if x in self.artists:
             songsOfX = self.artists[x]
             return songsOfX
 
-    def searchForSong(x):
+    def searchForSong(self, x):
         if x in self.songs:
             song = self.songs[x]
             bandName = song[0]
             dates = song[1]
             return bandName, dates
 
+    def topSongs(self, number):
+        topSongs = []
+        for i in self.songs:
+            numOfListening = len(self.songs[i][1])
+            while len(topSongs) <= numOfListening:
+                topSongs.append([len(topSongs)])
+            topSongs[numOfListening].append(i)
+        return topSongs[-number:]
+
+        index = 0
+        length = len(topSongs)
+        for i in range(length):
+            if len(topSongs[index]) == 1:
+                del topSongs[index]
+                index -= 1
+            index += 1
+
+    def topArtist(self, number):
+        topArtists = []
+        for i in self.artists:
+            numOfListening = 0
+            for q in self.artists[i]:
+                numOfListening += len(self.artists[i][q])
+            while len(topArtists) <= numOfListening:
+                topArtists.append([len(topArtists)])
+            topArtists[numOfListening].append(i)
+
+        index = 0
+        length = len(topArtists)
+        for i in range(length):
+            if len(topArtists[index]) == 1:
+                del topArtists[index]
+                index -= 1
+            index += 1
+
+        return topArtists[-number:]
+
+    def listInfo(self):
+        for i in self.artists:
+            print i
+            for q in self.artists[i]:
+                print "\t", q
+                for k in self.artists[i][q]:
+                    print "\t\t", k
+            print
+
 Okan = UserListerner("Filojiston")
-Lacin = UserListerner("LAcin98")
 
-def listInfo(user):
-    for i in user.artists:
-        print i
-        for q in user.artists[i]:
-            print "\t", q
-            for k in user.artists[i][q]:
-                print "\t\t", k
-        print
-
-listInfo(Lacin)
+print Okan.topSongs(int(raw_input(": ")))
