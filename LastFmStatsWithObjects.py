@@ -13,7 +13,7 @@ class UserListerner():
         self.artists = {}
         self.userName = userName
         self.startPage = 1
-        self.stopPage = 20
+        self.stopPage = 100
 
         for i in range(self.startPage, self.stopPage):
             self.getInformation(self.getLink(i))
@@ -84,7 +84,8 @@ class UserListerner():
             numOfListening = len(self.songs[i][1])
             while len(topSongs) <= numOfListening:
                 topSongs.append([len(topSongs)])
-            topSongs[numOfListening].append(i)
+            topSongs[numOfListening].append([self.songs[i][0], i])
+
 
         index = 0
         length = len(topSongs)
@@ -125,9 +126,10 @@ class UserListerner():
                     print "\t\t", k
             print
 
+
 class Artist():
-    def __init__(self, name):
-        self.getLink(name)
+    def __init__(self, Artistname):
+        self.getLink(Artistname)
 
     def getLink(self, artistName):
         self.linkOfArtist ="https://www.last.fm/music/"
@@ -142,7 +144,7 @@ class Artist():
         except requests.exceptions.ConnectionError, e:
             print e
         tree = html.fromstring(page.content)
-        self.genres = tree.xpath("//ul[@class = 'tags-list tags-list--global']/li/a/text()")
+        self.genresOfArtist = tree.xpath("//ul[@class = 'tags-list tags-list--global']/li/a/text()")
 
     def getWiki(self):
         try:
@@ -152,14 +154,60 @@ class Artist():
         tree = html.fromstring(page.content)
         self.shortWiki = tree.xpath("//div[@class = 'wiki-content']/p/text()")[0]
 
-Okan = UserListerner("Lacin98")
+
+class Song():
+    def __init__(self, songInfo):
+        self.songName = songInfo[1]
+        self.artistName = songInfo[0]
+        self.getLink(self.artistName, self.songName)
+
+    def getLink(self, artistName, songName):
+        self.linkOfSong ="https://www.last.fm/music/"
+        for i in artistName.split():
+            self.linkOfSong += i
+            self.linkOfSong += "+"
+        self.linkOfSong = self.linkOfSong[:-1]
+
+        self.linkOfSong += "/_/"
+
+        for i in songName.split():
+            self.linkOfSong += i
+            self.linkOfSong += "+"
+        self.linkOfSong = self.linkOfSong[:-1]
+
+    def getGenres(self):
+        try:
+            page = requests.get(self.linkOfSong)
+        except requests.exceptions.ConnectionError, e:
+            print e
+        tree = html.fromstring(page.content)
+        self.genresOfSong = tree.xpath("//ul[@class = 'tags-list tags-list--global']/li/a/text()")
+
+
+Okan = UserListerner("Filojiston")
 #Lacin = UserListerner("Lacin98")
 #Serkan = UserListerner("osteosit")
+Okan.listInfo()
+while True:
+    print Okan.searchForSong(raw_input(": "))
 
-for i in Okan.topArtist(5):
+"""
+for i in Okan.topSongs(3):
+    for q in range(1, len(i)):
+        print i[0], "times", i[q][0], "-", i[q][1]
+        song = Song(i[q])
+        song.getGenres()
+        for k in song.genresOfSong:
+            print "\t", k
+    print
+"""
+
+"""
+for i in Okan.topArtist(7):
     for q in range(1, len(i)):
         print i[0], "times", i[q]
         obj = Artist(i[q])
         obj.getGenres()
-        for k in obj.genres:
+        for k in obj.genresOfArtist:
             print "\t", k
+"""
