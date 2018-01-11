@@ -13,7 +13,7 @@ class UserListerner():
         self.artists = {}
         self.userName = userName
         self.startPage = 1
-        self.stopPage = 100
+        self.stopPage = 21
 
         for i in range(self.startPage, self.stopPage):
             self.getInformation(self.getLink(i))
@@ -97,7 +97,7 @@ class UserListerner():
 
         return topSongs[-number:]
 
-    def topArtist(self, number):
+    def topArtists(self, number):
         topArtists = []
         for i in self.artists:
             numOfListening = 0
@@ -125,6 +125,52 @@ class UserListerner():
                 for k in self.artists[i][q]:
                     print "\t\t", k
             print
+
+    def getSongsAfter(self, Finaldate):
+        songsAfter = self.songs
+        for song in self.songs:
+            counter = 0
+            for date in self.getSongDate(self.songs[song]):
+                if not self.compareDates(date, Finaldate):
+                    songsAfter[song][1].remove(songsAfter[song][1][counter])
+                    counter -= 1
+                counter += 1
+        index = 0
+        for i in range(len(songsAfter.keys())):
+            if songsAfter[songsAfter.keys()[index]][1] == []:
+                del songsAfter[songsAfter.keys()[index]]
+                index -= 1
+            index += 1
+        return songsAfter
+
+    def getSongDate(self, song):
+        complexDates = song[1]
+        simpleDates = []
+        for i in complexDates:
+            simpleDates.append(" ".join(i.split()[1:-1])[:-1])
+        return simpleDates
+
+    def compareDates(self, date1, baseDate):
+        date1 = date1.split();
+        baseDate = baseDate.split();
+        if int(date1[2]) > int(baseDate[2]):
+            return date1
+        elif int(date1[2]) == int(baseDate[2]):
+            if self.convertMonth(date1[1]) > self.convertMonth(baseDate[1]):
+                return date1
+            elif self.convertMonth(date1[1]) == self.convertMonth(baseDate[1]):
+                if int(date1[0]) >= int(baseDate[0]):
+                    return True
+
+    def convertMonth(self, month):
+        months = ["Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Agu", "Sep", "Oct", "Now", "Dec"]
+        return months.index(month)+1
+
+    def getSongTime(self, song):
+        pass
+
+    def compareTimes(self, date1, baseDate):
+        pass
 
 
 class Artist():
@@ -187,12 +233,17 @@ class Song():
 Okan = UserListerner("Filojiston")
 #Lacin = UserListerner("Lacin98")
 #Serkan = UserListerner("osteosit")
-Okan.listInfo()
-while True:
-    print Okan.searchForSong(raw_input(": "))
+
+until = Okan.getSongsAfter('9 Jan 2018')
+for i in until:
+    print i
+    print "\t", until[i][0]
+    for q in (until[i][1]):
+        print "\t\t", q
+print len(until), "songs has been listened."
 
 """
-for i in Okan.topSongs(3):
+for i in Okan.topSongs(5):
     for q in range(1, len(i)):
         print i[0], "times", i[q][0], "-", i[q][1]
         song = Song(i[q])
