@@ -13,7 +13,7 @@ class UserListerner():
         self.artists = {}
         self.userName = userName
         self.startPage = 1
-        self.stopPage = 21
+        self.stopPage = 71
 
         for i in range(self.startPage, self.stopPage):
             self.getInformation(self.getLink(i))
@@ -126,12 +126,12 @@ class UserListerner():
                     print "\t\t", k
             print
 
-    def getSongsAfter(self, Finaldate):
-        songsAfter = self.songs
-        for song in self.songs:
+    def getSongsBetweenDates(self, songs, firstDate, Finaldate):
+        songsAfter = songs
+        for song in songs:
             counter = 0
-            for date in self.getSongDate(self.songs[song]):
-                if not self.compareDates(date, Finaldate):
+            for date in self.getSongDate(songs[song]):
+                if not self.compareDates(date, Finaldate) and self.compareDates(firstDate, date):
                     songsAfter[song][1].remove(songsAfter[song][1][counter])
                     counter -= 1
                 counter += 1
@@ -163,7 +163,7 @@ class UserListerner():
                     return True
 
     def convertMonth(self, month):
-        months = ["Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Agu", "Sep", "Oct", "Now", "Dec"]
+        months = ["Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Agu", "Sep", "Oct", "Nov", "Dec"]
         return months.index(month)+1
 
     def getSongTime(self, song):
@@ -234,13 +234,15 @@ Okan = UserListerner("Filojiston")
 #Lacin = UserListerner("Lacin98")
 #Serkan = UserListerner("osteosit")
 
-until = Okan.getSongsAfter('9 Jan 2018')
+until = Okan.getSongsBetweenDates(Okan.songs, '11 Dec 2017', "12 Jan 2018")
+number  = 0
 for i in until:
     print i
     print "\t", until[i][0]
     for q in (until[i][1]):
         print "\t\t", q
-print len(until), "songs has been listened."
+        number += 1
+print number, "songs has been listened."
 
 """
 for i in Okan.topSongs(5):
