@@ -13,7 +13,7 @@ class UserListerner():
         self.artists = {}
         self.userName = userName
         self.startPage = 1
-        self.stopPage = 71
+        self.stopPage = 11
 
         for i in range(self.startPage, self.stopPage):
             self.getInformation(self.getLink(i))
@@ -234,7 +234,8 @@ Okan = UserListerner("Filojiston")
 #Lacin = UserListerner("Lacin98")
 #Serkan = UserListerner("osteosit")
 
-until = Okan.getSongsBetweenDates(Okan.songs, '11 Dec 2017', "12 Jan 2018")
+"""
+until = Okan.getSongsBetweenDates(Okan.songs, raw_input("Start date: "), raw_input("End date: "))
 number  = 0
 for i in until:
     print i
@@ -243,9 +244,9 @@ for i in until:
         print "\t\t", q
         number += 1
 print number, "songs has been listened."
-
 """
-for i in Okan.topSongs(5):
+"""
+for i in Okan.topSongs(int(raw_input("Max song num: "))):
     for q in range(1, len(i)):
         print i[0], "times", i[q][0], "-", i[q][1]
         song = Song(i[q])
@@ -254,9 +255,8 @@ for i in Okan.topSongs(5):
             print "\t", k
     print
 """
-
 """
-for i in Okan.topArtist(7):
+for i in Okan.topArtists(int(raw_input("Max artist num: "))):
     for q in range(1, len(i)):
         print i[0], "times", i[q]
         obj = Artist(i[q])
